@@ -1,0 +1,18 @@
+FROM openjdk:8-jdk
+MAINTAINER <n3integration@gmail.com>
+
+RUN	apt update
+RUN	apt install -y nano openjfx xvfb openssh-server net-tools
+
+VOLUME /data
+
+COPY build/libs/*.jar /app/
+
+RUN	mkdir -p ~/.config/haw_vs
+RUN	echo 172.17.0.2:4000 > ~/.config/haw_vs/dns_host
+RUN	echo root/registration >> ~/.config/haw_vs/dns_host
+
+COPY	./startRegistry.sh /
+RUN	chmod a+x /startRegistry.sh
+
+CMD	["/startRegistry.sh"]

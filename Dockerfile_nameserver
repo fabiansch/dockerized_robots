@@ -1,0 +1,18 @@
+FROM openjdk:8-jdk
+MAINTAINER <n3integration@gmail.com>
+
+RUN	apt update
+RUN	apt install -y nano openjfx xvfb openssh-server net-tools
+
+VOLUME /data
+
+COPY build/libs/*.jar /app/
+
+RUN	mkdir -p ~/.config/haw_vs
+RUN	echo 192.168.2.111:4000 > ~/.config/haw_vs/dns_host
+RUN	echo root/registration >> ~/.config/haw_vs/dns_host
+
+COPY    ./startNameserver.sh /root/
+RUN     chmod a+x /root/startNameserver.sh
+
+CMD     ["/root/startNameserver.sh"]

@@ -1,0 +1,21 @@
+FROM openjdk:latest
+
+RUN	apt update
+RUN	apt install -y nano openjfx xvfb openssh-server net-tools
+
+VOLUME ~/.config/haw_vs
+
+COPY build/libs/*.jar /app/
+
+RUN	mkdir -p ~/.config/haw_vs
+
+COPY    ./startServer.sh /app/
+RUN     chmod a+x /app/startServer.sh
+
+ENV ip_dns=0.0.0.0
+ENV ip_server=docker_container_ip
+ENV server_namespace_and_name=root.serverDefault
+ENV robot_type=simulation
+ENV port_begin=-1
+
+CMD     ["/app/startServer.sh"]
